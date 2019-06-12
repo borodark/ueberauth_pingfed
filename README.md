@@ -67,23 +67,6 @@ Customize the transformation here:
       relevant_groups: [ "CN=Team Awesome,OU=Ad-Hoc,OU=Role Groups,OU=Groups,DC=it,DC=yourgloriousdomain,DC=com", ...]
     
     ```
-The `relevant_groups` list is the literal value of the Active Directory Group name that application may care about to establish the Application Specific roles. The list of all  users AD groups, coming from Ping Federate, will be filtered using this list. Only one matched will be left in `memeber_of` list. 
-
-TODO Change the design To have `relevant_groups` as _map_ of the `Application Role` => `List of groups the user has to belong to`:
-
-```elixir
-[ admin: [
-    "CN=ThisAppAdmin,OU=Role Groups,OU=Groups,DC=yourgloriousdomain,DC=com", 
-    "CN=Admin,OU=Role Groups,OU=Groups,DC=it,DC=yourgloriousdomain,DC=com"
-    ], 
- sales: [
-    "CN=Sales,OU=Role Groups,OU=Groups,DC=yourgloriousdomain,DC=com",
-    "CN=Sales Manager,OU=West,OU=Role Groups,OU=Groups,DC=it,DC=yourgloriousdomain,DC=com"
-   ]
-]
-```
-The logic has to change here: https://github.com/borodark/ueberauth_pingfed/blob/master/lib/ueberauth/strategy/pingfed.ex#L164 **PRs are welcome!**
-This way the aplication specific roles can be calculated at the succesfull login.
 
 1.  Include the Überauth plug in your controller:
 
@@ -145,6 +128,32 @@ config :ueberauth, Ueberauth,
     pingfed: {Ueberauth.Strategy.Pingfed, [send_redirect_uri: false]}
   ]
 ```
+
+### Improvements for the future
+
+**PRs are welcome!**
+
+The `relevant_groups` list is the literal value of the Active Directory Group name that application may care about to establish the Application Specific roles. The list of all  users AD groups, coming from Ping Federate, will be filtered using this list. Only one matched will be left in `memeber_of` list. 
+
+TODO Change the design To have `relevant_groups` as _map_ of the `Application Role` => `List of groups the user has to belong to`:
+
+```elixir
+[ admin: [
+    "CN=ThisAppAdmin,OU=Role Groups,OU=Groups,DC=yourgloriousdomain,DC=com", 
+    "CN=Admin,OU=Role Groups,OU=Groups,DC=it,DC=yourgloriousdomain,DC=com"
+    ], 
+ sales: [
+    "CN=Sales,OU=Role Groups,OU=Groups,DC=yourgloriousdomain,DC=com",
+    "CN=Sales Manager,OU=West,OU=Role Groups,OU=Groups,DC=it,DC=yourgloriousdomain,DC=com"
+   ]
+]
+```
+The logic has to change here: 
+https://github.com/borodark/ueberauth_pingfed/blob/master/lib/ueberauth/strategy/pingfed.ex#L164 
+
+This way the aplication specific roles can be calculated at the succesfull login.
+
+
 
 ## License
 
