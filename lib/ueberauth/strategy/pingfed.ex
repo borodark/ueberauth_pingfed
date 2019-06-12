@@ -159,7 +159,7 @@ defmodule Ueberauth.Strategy.PingFed do
         config =
           :ueberauth
           |> Application.fetch_env!(Ueberauth.Strategy.PingFed.OAuth)
-        relevant_groups = config |> Keyword.get(:relevant_groups)
+        relevant_groups = config |> Keyword.get(:relevant_groups) || []
         Logger.debug "Application Groups ...  #{inspect relevant_groups}"
         ad_groups =  user["member_of"]
         Logger.debug "User is member of ...  #{inspect ad_groups}"
