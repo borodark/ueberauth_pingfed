@@ -106,7 +106,7 @@ defmodule Ueberauth.Strategy.PingFed do
   """
   def handle_callback!(%Plug.Conn{params: %{"code" => code}} = conn) do
     module = option(conn, :oauth2_module)
-    token = apply(module, :get_token!, [[code: code], [options: [insecure: true]]])  # TODO move to config
+    token = apply(module, :get_token!, [[code: code]])
 
     if token.access_token == nil do
       set_errors!(conn, [error(token.other_params["error"], token.other_params["error_description"])])
